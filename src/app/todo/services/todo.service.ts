@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Todo } from '../models/todo';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,24 +27,23 @@ export class TodoService {
       completed: false,
     },
   ];
-
-  // TODO replace with a get request
+  
   public getTodos(): Observable<Todo[]> {
     return this.http.get<Todo[]>(`${environment.apiUrl}`);
   }
-  //todos: Observable<Todo[]> = this.getTodos()
-  //todos: Promise<Todo[]> = Promise.resolve(this.todoList);
 
-  async addTodo(title: string): Promise<Todo> {
-    // TODO: replace with a POST request
+  async addTodo(title: string): Promise<Observable<Todo>> {
     const todo = {
       id: this.todoId++,
       title: title,
       completed: false,
     };
-    this.todoList.push(todo);
 
-    return todo;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Todo>(`${environment.apiUrl}`, JSON.stringify(todo), {headers})
   }
 
   async updateTodo(updatedTodo: Todo): Promise<Todo> {

@@ -12,11 +12,13 @@ export class TodoListComponent {
   todos$ = new Observable<Todo[]>();
   ngOnInit(): void {
     this.todos$ = this.todoService.getTodos();
+    console.log("Init:")
+    this.logTodos();
+  }
+
+  logTodos(): void {
     this.todos$.subscribe((todos) => {
       console.log(todos)
-      // todos.forEach((todo) => {
-      //   console.log(todo.title);
-      // });
     });
   }
 
@@ -28,6 +30,20 @@ export class TodoListComponent {
   // updateTodo(todo: Todo) {
   //   this.todoService.updateTodo(todo);
   // }
+
+  async newTodo(title: string) {
+    await (await this.todoService.addTodo(title)).subscribe(
+      response => {
+        console.log('Success:', response);
+        this.todos$ = this.todoService.getTodos();
+      },
+      error => {
+        console.error('Error:', error);
+      }
+    )
+    console.log("Add:")
+    this.logTodos();
+  }
 
   // async newTodo(title: string) {
   //   await this.todoService.addTodo(title);
