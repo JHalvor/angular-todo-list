@@ -10,23 +10,6 @@ import { environment } from 'src/environments/environment';
 export class TodoService {
   private http = inject(HttpClient);
   private todoId = 1;
-  private todoList: Todo[] = [
-    {
-      id: this.todoId++,
-      title: 'serve the app',
-      completed: true,
-    },
-    {
-      id: this.todoId++,
-      title: 'familiarise yourself with the codebase',
-      completed: false,
-    },
-    {
-      id: this.todoId++,
-      title: 'start talking to the api',
-      completed: false,
-    },
-  ];
 
   public getTodos(): Observable<Todo[]> {
     return this.http.get<Todo[]>(`${environment.apiUrl}`);
