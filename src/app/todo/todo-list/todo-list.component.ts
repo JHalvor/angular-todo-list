@@ -22,14 +22,21 @@ export class TodoListComponent {
     });
   }
 
-
   constructor(private readonly todoService: TodoService) {}
 
-  // todos = this.todoService.todos;
-
-  // updateTodo(todo: Todo) {
-  //   this.todoService.updateTodo(todo);
-  // }
+  async updateTodo(id: Number, todo: Todo) {
+    await (await this.todoService.updateTodo(id, todo)).subscribe(
+      response => {
+        console.log('Success:', response);
+        this.todos$ = this.todoService.getTodos();
+      },
+      error => {
+        console.error('Error:', error);
+      }
+    )
+    console.log("Updated:")
+    this.logTodos();
+  }
 
   async newTodo(title: string) {
     await (await this.todoService.addTodo(title)).subscribe(
@@ -41,12 +48,7 @@ export class TodoListComponent {
         console.error('Error:', error);
       }
     )
-    console.log("Add:")
+    console.log("Added:")
     this.logTodos();
   }
-
-  // async newTodo(title: string) {
-  //   await this.todoService.addTodo(title);
-  //   this.todos = this.todoService.todos;
-  // }
 }

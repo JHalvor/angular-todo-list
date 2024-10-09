@@ -27,7 +27,7 @@ export class TodoService {
       completed: false,
     },
   ];
-  
+
   public getTodos(): Observable<Todo[]> {
     return this.http.get<Todo[]>(`${environment.apiUrl}`);
   }
@@ -46,14 +46,11 @@ export class TodoService {
     return this.http.post<Todo>(`${environment.apiUrl}`, JSON.stringify(todo), {headers})
   }
 
-  async updateTodo(updatedTodo: Todo): Promise<Todo> {
-    // TODO: replace with a PUT request
-    const foundTodo = this.todoList.find((todo) => todo.id === updatedTodo.id);
-    if (!foundTodo) {
-      throw new Error('todo not found');
-    }
-    Object.assign(foundTodo, updatedTodo);
+  async updateTodo(id: Number, updatedTodo: Todo): Promise<Observable<Todo>> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
-    return foundTodo;
+    return this.http.put<Todo>(`${environment.apiUrl}/${id}`, JSON.stringify(updatedTodo), {headers})
   }
 }
